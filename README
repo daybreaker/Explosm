@@ -1,0 +1,5 @@
+This project is just a small script to output the average "Facebook Shares" each author of Cyanide and Happiness gets per comic.
+
+Eventually I'd like to throw a web front end on it to show some neat charts, maybe graphing out average share over time or other cool things, or keeping track of other statistics about the comics or authors.
+
+The script itself takes a while to run. Maybe it could benefit from some kind of concurrent processing, via Typhoeus/Hydra?
