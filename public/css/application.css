@@ -1,0 +1,31 @@
+header {
+	border-bottom: 12px solid brown;
+}
+
+body{
+	background: #f6f6f6;
+}
+
+header h1{
+	font-family: 'Droid Sans', arial, serif;
+	font-size: 36px;
+	border-bottom: 12px solid #c3c9ff;
+}
+
+#content{
+	width: 976px;
+	margin: 20px auto;
+}
+
+#accordion h3{
+	font-family: 'Droid Sans', arial, serif;
+	font-size: 18px;
+}
+
+#accordion h3.ui-state-active{
+	border-bottom: 10px solid brown;
+}
+
+.ui-accordion .ui-accordion-content {
+	background: #e3e9ff;
+}

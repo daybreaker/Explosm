@@ -1,47 +1,66 @@
 require 'open-uri'
 require 'nokogiri'
 require 'json'
+require 'data_mapper'
 require 'sinatra'
 
-def refresh_results
-  authors = %w(Rob Dave Matt Kris)
-  author_url = 'http://www.explosm.net/comics/author/'
-  fb_url = "https://graph.facebook.com/http://www.explosm.net"
+configure do
+  set :environment, 'development'
+end
 
-  total_results = {}
+DataMapper.setup(:default, ENV['DATABASE_URL'] || 'mysql://daybreaker:groovy@localhost/explosm_development')
+  
+  
+class Comic
+  include DataMapper::Resource
 
-  authors.each do |a|
-    author_history = Nokogiri::HTML(open(author_url + a))
-    author_comics = author_history.css('table a').collect{|x| x.attributes['href'].text}
+  property :id,         Serial    # An auto-increment integer key
+  property :comic_id,   Integer   
+  property :comic_url,  String
+  property :author,     String
+  property :date,       String
+  property :likes,      Integer
+  property :created_at, DateTime  # A DateTime, for any date you might like.
+end
+
+DataMapper.auto_upgrade!
     
-    total_author_comics = author_comics.size
-    total_author_shares = 0
+AUTHORS = %w(Rob Dave Matt Kris)
+AUTHOR_URL = 'http://www.explosm.net/comics/author/'
+FB_URL = "https://graph.facebook.com/http://www.explosm.net"
 
-    puts "Total Comics by #{a}: #{total_author_comics}\n"
-    
-    count = 1
-    total_shares = 0
-    
-    author_comics.each do |c|
-    	response = open(fb_url + c)
-    	result = JSON.parse(response.string)
-    	total_shares += result['shares']
-    	puts "on: " + count.to_s + "\n" if (count%30 == 0)
-    	
-      puts  ((count/(total_author_comics/10).to_i)*10).to_s + "% done -- on comic #{count}" + " for an average " + (total_shares/count).to_s + " facebook shares so far." if ((count%((total_author_comics/10).to_i)) == 0)
-
-      count += 1
-    end
-    
-    total_results[a] = {'total_comics' => total_author_comics, 'average_shares' => total_shares/total_author_comics}
-  end
-
-  total_results.each do |name, info|
-    puts name + "did #{info['total_comics']} for an average #{info['average_shares']} facebook shares."
-  end
+def author_comics(author)
+  x = Nokogiri::HTML(open(AUTHOR_URL + author))
+  c = x.css('table a').collect{|x| x.attributes['href'].text}
+  c
 end
 
 get '/' do
+  @authors = AUTHORS
   erb :index
 end
+
+get '/makefile' do
+  comics = {}
+  
+  AUTHORS.each do |author|
+    
+    comics = author_comics(author)
+    comics.each do |comic|
+      response = open(FB_URL + comic)
+    	result = JSON.parse(response.string)
+    	c = Comic.create(
+    	    :comic_id     => comic.split('/')[2].to_i,  
+          :comic_url    => comic,
+          :author       => author,
+          :date         => '',
+          :likes        => result['shares'].to_i,
+          :created_at   => Time.now
+      )
+      puts c.saved?
+      puts 'Author: ' + c.author + " Comic: " + c.comic_id.to_s + " Likes: " + c.likes.to_s
+    end
+  end
+end
+
 

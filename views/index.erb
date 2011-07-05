@@ -1,1 +1,6 @@
-<p>Hey</p>
+<div id="accordion">
+  <% @authors.each do |author| %>
+    <h3><a href="#"><%= author %></a></h3>
+    <div>Content</div>
+  <% end %>
+</div>
