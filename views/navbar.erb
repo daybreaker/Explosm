@@ -1,0 +1,6 @@
+<ul id="nav">
+    <li><a href="/"<%= ' class="active"' if @author.nil? %>>Home</a></li>
+  <% AUTHORS.each do |a| %>
+    <li><a href="/author/<%= a %>"<%= ' class="active"' if @author == a %>><%= a %></a></li>
+  <% end %>
+</ul>

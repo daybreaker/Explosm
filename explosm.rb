@@ -2,6 +2,7 @@ require 'open-uri'
 require 'nokogiri'
 require 'json'
 require 'data_mapper'
+require 'dm-aggregates'
 require 'sinatra'
 
 configure do
@@ -36,8 +37,14 @@ def author_comics(author)
 end
 
 get '/' do
-  @authors = AUTHORS
+  @comics = Comic.all(:order => [ :likes.desc ])
   erb :index
+end
+
+get '/author/:name' do 
+  @author = params[:name]
+  @comics = Comic.all(:author => @author)
+  erb :author
 end
 
 get '/makefile' do
@@ -57,8 +64,6 @@ get '/makefile' do
           :likes        => result['shares'].to_i,
           :created_at   => Time.now
       )
-      puts c.saved?
-      puts 'Author: ' + c.author + " Comic: " + c.comic_id.to_s + " Likes: " + c.likes.to_s
     end
   end
 end

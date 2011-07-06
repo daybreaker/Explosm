@@ -1,0 +1,20 @@
+<%= erb :navbar %>
+<div>
+  <table id="sortable" class="tablesorter">
+    <thead>
+      <tr>
+        <th>Comic</th>
+        <th>Likes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @comics.each do |comic| %>
+      <tr>
+        <td><a href="http://explosm.com<%= comic.comic_url %>">Comic #<%= comic.comic_id %></a></td>
+        <td><%= comic.likes %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div id="pager" class="pager"></div>
+</div>

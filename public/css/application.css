@@ -17,15 +17,55 @@ header h1{
 	margin: 20px auto;
 }
 
-#accordion h3{
+table.table thead tr th.header, table.tablesorter thead tr th.header {
+font-family: 'Droid Sans', arial, serif;
+	font-size: 14px;
+}
+
+ul {
+list-style-type: none;
+width: 100%;
+margin: auto;
+}
+
+ul li {
+float: left;
+text-align: center;
+vertical-align: middle;
+}
+
+ul#nav{
+height: 80px;
+}
+
+ul#average_likes{
+	border: 5px solid #c3c9ff;
+	height: 40px;
+	margin-top: 10px;
+}
+
+ul#nav li {
+width: 20%;
+}
+
+ul#average_likes li{
+width: 25%;
 	font-family: 'Droid Sans', arial, serif;
-	font-size: 18px;
+	font-size: 22px;
+	border-top: 5px solid brown;
+	border-bottom: 5px solid brown;
+	line-height: 30px
 }
 
-#accordion h3.ui-state-active{
-	border-bottom: 10px solid brown;
+
+ul a {
+	font-family: 'Droid Sans', arial, serif;
+	font-size: 22px;
+	border-bottom: 12px solid #c3c9ff;
+	line-height: 80px;
+	text-decoration: none;
 }
 
-.ui-accordion .ui-accordion-content {
-	background: #e3e9ff;
+ul a:hover, ul a.active{
+		border-bottom: 12px solid brown;
 }

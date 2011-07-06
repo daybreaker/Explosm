@@ -1,6 +1,25 @@
-<div id="accordion">
-  <% @authors.each do |author| %>
-    <h3><a href="#"><%= author %></a></h3>
-    <div>Content</div>
+<%= erb :navbar %>
+<h2>Top 10 Comics</h2>
+<table class="table" id="top10table">
+  <thead>
+  <tr>
+    <th class="header">Author</th>
+    <th class="header">Comic</th>
+    <th class="header">Likes</th>
+  </tr>
+  </thead>
+<% @comics[0..10].each do |c| %>
+  <tr>
+    <td><%= c.author %></td>
+    <td><a href="http://explosm.com/<%= c.comic_url %>">Comic #<%= c.comic_id %></a></td>
+    <td><%= c.likes %></td>
+  </tr>
+<% end %>
+</table>
+<h2>Average likes per Author</h2>
+<ul id="average_likes">
+  <% AUTHORS.each do |a| %>
+    <% ac = @comics.select{|c| c.author == a} %>
+    <li><%= a %>: <%= ac.inject(0){|sum,c| sum+=c.likes} / ac.count %></li>
   <% end %>
-</div>
+<ul>
